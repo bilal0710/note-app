@@ -1,7 +1,7 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" >
     <ion-toolbar>
         <ion-title>
-            Notes
+            Test
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -14,24 +14,12 @@
     </ion-header>
 
     <ion-list lines="full">
-        <ion-item detail="true">
-            <ion-label>
-                <h3>Button Item</h3>
-                <p>Detail set to true - detail arrow displays on both modes</p>
-            </ion-label>
+        <ion-item *ngFor="let note of notes"
+                  detail="true"
+                  [routerLink]="'/note/' + note.id">
+        <app-note [note]="note"></app-note>
         </ion-item>
-        <ion-item detail="true">
-            <ion-label>
-                <h3>Button Item</h3>
-                <p>Detail set to true - detail arrow displays on both modes</p>
-            </ion-label>
-        </ion-item>
-        <ion-item detail="true">
-            <ion-label>
-                <h3>Button Item</h3>
-                <p>Detail set to true - detail arrow displays on both modes</p>
-            </ion-label>
-        </ion-item>
+
     </ion-list>
 
 
@@ -39,7 +27,7 @@
              slot="fixed"
              vertical="bottom"
              horizontal="end">
-        <ion-fab-button>
+        <ion-fab-button [routerLink]="'/note/create'">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>

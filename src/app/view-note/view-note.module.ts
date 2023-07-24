@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ViewNotePageRoutingModule } from './view-note-routing.module';
 
 import { ViewNotePage } from './view-note.page';
+import {LibModule} from "../lib/lib.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ViewNotePageRoutingModule
+    ViewNotePageRoutingModule,
+    LibModule
   ],
   declarations: [ViewNotePage]
 })

@@ -1,13 +1,18 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>view-note</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text="Home" defaultHref="/"></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">view-note</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+    <ng-container *ngIf="createNote; else note">
+        <app-create-note></app-create-note>
+    </ng-container>
+
+    <ng-template #note>
+        <app-note [note]="noteData"
+                  [viewList]="true"></app-note>
+    </ng-template>
 </ion-content>

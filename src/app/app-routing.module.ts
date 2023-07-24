@@ -12,7 +12,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'view-note',
+    path: 'note',
     loadChildren: () => import('./view-note/view-note.module').then( m => m.ViewNotePageModule)
   },
 ];
