@@ -11,6 +11,10 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'view-note',
+    loadChildren: () => import('./view-note/view-note.module').then( m => m.ViewNotePageModule)
+  },
 ];
 
 @NgModule({
