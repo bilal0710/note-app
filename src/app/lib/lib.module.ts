@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {NoteComponent} from "./note/note.component";
 import {IonicModule} from "@ionic/angular";
 import {CreateNoteComponent} from "./create-note/create-note.component";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -13,7 +14,9 @@ import {CreateNoteComponent} from "./create-note/create-note.component";
     ],
     imports: [
         CommonModule,
-        IonicModule.forRoot()
+        IonicModule.forRoot(),
+        FormsModule,
+        ReactiveFormsModule
     ]
 })
 export class LibModule {
