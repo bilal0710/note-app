@@ -42,4 +42,11 @@ export class NoteService {
         this.notes.push(newNote);
         console.log('after', this.notes);
     }
+
+    deleteNoteFromNotes(noteId: string) {
+        const index = this.notes.findIndex(note => noteId === note.id);
+        if (index > -1) {
+            this.notes.splice(index, 1);
+        }
+    }
 }

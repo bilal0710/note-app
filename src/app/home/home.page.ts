@@ -21,5 +21,9 @@ export class HomePage implements OnInit {
         this.notes = this.noteService.notes;
     }
 
+    deleteNoteFromNotes(noteId: string) {
+        this.noteService.deleteNoteFromNotes(noteId);
+    }
+
 
 }
