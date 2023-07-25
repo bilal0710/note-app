@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NoteService} from "../view-note/note.service";
 import {INote} from "../types/inote.interface";
-import {Platform} from "@ionic/angular";
+import {AlertController, Platform, ToastController} from "@ionic/angular";
 
 @Component({
     selector: 'app-home',
@@ -11,9 +11,12 @@ import {Platform} from "@ionic/angular";
 export class HomePage implements OnInit {
 
     notes: INote[] = [];
-    ios= false;
+    ios = false;
 
-    constructor(private noteService: NoteService, private platform: Platform) {
+    constructor(private noteService: NoteService,
+                private platform: Platform,
+                private alertController: AlertController,
+                private toastController: ToastController) {
     }
 
     ngOnInit(): void {
@@ -21,8 +24,38 @@ export class HomePage implements OnInit {
         this.notes = this.noteService.notes;
     }
 
-    deleteNoteFromNotes(noteId: string) {
-        this.noteService.deleteNoteFromNotes(noteId);
+    async deleteNoteFromNotes(noteId: string) {
+        const alert = await this.alertController.create({
+            header: 'Delete Note',
+            message: 'Do you want to delete this note?',
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                },
+                {
+                    text: 'OK',
+                    role: 'confirm',
+                    handler: () => {
+                        console.log('OK clicked');
+                        this.noteService.deleteNoteFromNotes(noteId);
+                        this.presentToast('Note deleted successfully');
+                    },
+                },
+            ],
+        });
+
+        await alert.present();
+    }
+
+    async presentToast(msg: string) {
+        const toast = await this.toastController.create({
+            message: msg,
+            duration: 1500,
+            position: 'bottom',
+        });
+
+        await toast.present();
     }
 
 
