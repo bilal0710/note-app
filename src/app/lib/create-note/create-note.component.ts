@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {debounceTime, distinctUntilChanged} from "rxjs";
+import {INote} from "../../types/inote.interface";
+import {NoteService} from "../../view-note/note.service";
 
 @Component({
     selector: 'app-create-note',
@@ -9,26 +11,48 @@ import {debounceTime, distinctUntilChanged} from "rxjs";
 })
 export class CreateNoteComponent implements OnInit {
 
-    public title!: FormControl;
-    public content!: FormControl;
-    public debounce: number = 400;
+    debounce: number = 400;
+    title!: FormControl;
+    content!: FormControl;
+    newNote!: INote;
+    @Input() note!: INote;
 
-    constructor() {
+
+    constructor(private noteService: NoteService) {
     }
 
-    // ToDO: Add a save button to the create note page or add logic to save the note when the user navigates away from the page.
     ngOnInit() {
-        this.title = new FormControl('');
+        if (this.note) {
+            this.title = new FormControl(this.note.title);
+            this.content = new FormControl(this.note.content);
+            this.newNote = this.note;
+            console.log(this.note);
+        } else {
+            this.title = new FormControl('');
+            this.content = new FormControl('');
+        }
+
         this.title.valueChanges
             .pipe(debounceTime(this.debounce), distinctUntilChanged())
             .subscribe(query => {
-                console.log(query);
+                this.newNote = {
+                    id: this.newNote?.id ? this.newNote.id : (Math.random() + 1).toString(36).substring(7),
+                    title: query,
+                    content: this.newNote?.content ? this.newNote.content : '',
+                }
+                console.log(this.newNote);
+                this.noteService.addNewNoteToNotes(this.newNote);
             });
-        this.content = new FormControl('');
         this.content.valueChanges
             .pipe(debounceTime(this.debounce), distinctUntilChanged())
             .subscribe(query => {
-                console.log(query);
+                this.newNote = {
+                    id: !this.newNote?.id ? (Math.random() + 1).toString(36).substring(7) : this.newNote.id,
+                    title: this.newNote?.title ? this.newNote.title : '',
+                    content: query,
+                }
+                console.log(this.newNote);
+                this.noteService.addNewNoteToNotes(this.newNote);
             });
     }
 }
