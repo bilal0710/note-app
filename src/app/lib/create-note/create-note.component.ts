@@ -1,15 +1,15 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from "@angular/forms";
-import {debounceTime, distinctUntilChanged} from "rxjs";
 import {INote} from "../../types/inote.interface";
 import {NoteService} from "../../view-note/note.service";
+import {debounceTime, distinctUntilChanged} from "rxjs";
 
 @Component({
     selector: 'app-create-note',
     templateUrl: './create-note.component.html',
     styleUrls: ['./create-note.component.scss'],
 })
-export class CreateNoteComponent implements OnInit {
+export class CreateNoteComponent implements OnInit, OnDestroy {
 
     debounce: number = 400;
     title!: FormControl;
@@ -28,6 +28,7 @@ export class CreateNoteComponent implements OnInit {
             this.newNote = this.note;
             console.log(this.note);
         } else {
+            console.log('no note');
             this.title = new FormControl('');
             this.content = new FormControl('');
         }
@@ -36,23 +37,26 @@ export class CreateNoteComponent implements OnInit {
             .pipe(debounceTime(this.debounce), distinctUntilChanged())
             .subscribe(query => {
                 this.newNote = {
-                    id: this.newNote?.id ? this.newNote.id : (Math.random() + 1).toString(36).substring(7),
+                    id: this.newNote?.id ,
                     title: query,
                     content: this.newNote?.content ? this.newNote.content : '',
                 }
                 console.log(this.newNote);
-                this.noteService.addNewNoteToNotes(this.newNote);
             });
         this.content.valueChanges
             .pipe(debounceTime(this.debounce), distinctUntilChanged())
             .subscribe(query => {
                 this.newNote = {
-                    id: !this.newNote?.id ? (Math.random() + 1).toString(36).substring(7) : this.newNote.id,
+                    id: this.newNote?.id ,
                     title: this.newNote?.title ? this.newNote.title : '',
                     content: query,
                 }
                 console.log(this.newNote);
-                this.noteService.addNewNoteToNotes(this.newNote);
             });
+    }
+
+    ngOnDestroy(): void {
+        console.log('destroyed');
+        this.noteService.addNewNoteToNotes(this.newNote).subscribe((note) => console.log('added new note', note));
     }
 }

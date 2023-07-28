@@ -21,8 +21,16 @@ export class ViewNotePage implements OnInit {
             const noteId = paramMap.get('id') as string;
             this.createNote = noteId === 'create';
             console.log('noteId', noteId);
+
             if (noteId && noteId !== 'create') {
-                this.noteData = this.noteService.notes.find((note: INote) => note.id === noteId) as INote;
+                //this.noteService.notes.find((note: INote) => note.id === noteId) as INote;
+                this.noteService.getNotes().subscribe(notes => {
+                    console.log('notes', notes);
+                    if (notes.length) {
+                        this.noteData = notes.find((note: INote) => note.id === noteId) as INote;
+                        console.log('this.noteData', this.noteData);
+                    }
+                });
             }
         });
     }

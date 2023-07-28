@@ -21,7 +21,18 @@ export class HomePage implements OnInit {
 
     ngOnInit(): void {
         this.ios = this.platform.is('ios');
-        this.notes = this.noteService.notes;
+        this.noteService.getNotes().subscribe(notes => {
+            console.log('notes', notes);
+            if (notes.length > 0 && this.notes.length === 0) {
+                this.notes = notes;
+            }
+        });
+        this.noteService.updateNote.subscribe(notes => {
+            console.log('notes subject= ', notes);
+            if (notes.length > 0) {
+                this.notes = notes;
+            }
+        });
     }
 
     async deleteNoteFromNotes(noteId: string) {

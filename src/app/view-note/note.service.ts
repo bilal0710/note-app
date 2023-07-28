@@ -1,35 +1,26 @@
 import {Injectable} from '@angular/core';
 import {INote} from "../types/inote.interface";
+import {DatabaseService} from "../database.service";
+import {map, of, Subject} from "rxjs";
 
 @Injectable({
     providedIn: 'root'
 })
 export class NoteService {
 
-    notes = [
-        {
-            id: '1',
-            title: 'Note 1',
-            content: 'This is the first note',
-        },
-        {
-            id: '2',
-            title: 'Note 2',
-            content: 'This is the second note',
-        },
-        {
-            id: '3',
-            title: 'Note 3',
-            content: 'This is the third note',
-        },
-        {
-            id: '4',
-            title: 'Note 4',
-            content: 'This is the fourth note',
-        },
-    ];
+    private notes: INote[] = [];
+    updateNote= new Subject<INote[]>();
 
-    constructor() {
+    constructor(private dataBaseService: DatabaseService) {
+    }
+
+    getNotes() {
+        return this.dataBaseService.getNotes().pipe(
+            map((notes: INote[]) => {
+                this.notes = notes;
+                return notes;
+            })
+        );
     }
 
     addNewNoteToNotes(newNote: INote) {
@@ -37,10 +28,16 @@ export class NoteService {
         if (index > -1) {
             console.log('in', this.notes);
             this.notes[index] = newNote;
-            return;
+            return of(newNote);
         }
         this.notes.push(newNote);
         console.log('after', this.notes);
+        return this.dataBaseService.createNotes(newNote).pipe(
+            map((note: INote) => {
+                this.updateNote.next(this.notes);
+                return note;
+            })
+        );
     }
 
     deleteNoteFromNotes(noteId: string) {
