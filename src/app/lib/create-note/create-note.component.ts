@@ -22,6 +22,8 @@ export class CreateNoteComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        console.log('Create Component note= ', this.note);
+
         if (this.note) {
             this.title = new FormControl(this.note.title);
             this.content = new FormControl(this.note.content);
@@ -37,7 +39,7 @@ export class CreateNoteComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(this.debounce), distinctUntilChanged())
             .subscribe(query => {
                 this.newNote = {
-                    id: this.newNote?.id ,
+                    id: this.newNote?.id,
                     title: query,
                     content: this.newNote?.content ? this.newNote.content : '',
                 }
@@ -47,7 +49,7 @@ export class CreateNoteComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(this.debounce), distinctUntilChanged())
             .subscribe(query => {
                 this.newNote = {
-                    id: this.newNote?.id ,
+                    id: this.newNote?.id,
                     title: this.newNote?.title ? this.newNote.title : '',
                     content: query,
                 }
@@ -57,6 +59,6 @@ export class CreateNoteComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         console.log('destroyed');
-        this.noteService.addNewNoteToNotes(this.newNote).subscribe((note) => console.log('added new note', note));
+        this.newNote ? this.noteService.addNewNoteToNotes(this.newNote).subscribe((note) => console.log('added new note', note)) : null;
     }
 }

@@ -24,6 +24,9 @@ export class NoteService {
     }
 
     addNewNoteToNotes(newNote: INote) {
+        console.log('Service newNote', newNote);
+        console.log('service notes', this.notes);
+
         const index = this.notes.findIndex(note => newNote.id === note.id);
         if (index > -1) {
             console.log('in', this.notes);

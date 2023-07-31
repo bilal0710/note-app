@@ -7,12 +7,12 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ng-container *ngIf="noteData; else createNote">
+    <div *ngIf="noteData">
         <app-create-note [note]="noteData"></app-create-note>
-    </ng-container>
+    </div>
 
-    <ng-template #createNote>
+    <div *ngIf="!noteData">
         <app-create-note/>
-    </ng-template>
+    </div>
 
 </ion-content>
